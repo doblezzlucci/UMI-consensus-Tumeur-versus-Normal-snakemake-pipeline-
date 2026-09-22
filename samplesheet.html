@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulaire de suivi longitudinal — Tumeur vs normal</title>
+  <style>
+    :root{--ink:#30243f;--muted:#756b7e;--plum:#6f4c87;--dark:#56376d;--soft:#f8f4fa;--line:#ddd1e4;--white:#fff}
+    *{box-sizing:border-box}html{background:#f4eef7}body{margin:0;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}
+    main{min-height:100vh;padding:38px 24px;background:radial-gradient(circle at 6% 5%,rgba(184,151,204,.26),transparent 27%),radial-gradient(circle at 95% 70%,rgba(221,195,226,.38),transparent 32%),linear-gradient(145deg,#fbf9fc,#f0e8f4)}
+    form{width:min(1180px,100%);margin:auto;overflow:hidden;border:1px solid rgba(111,76,135,.17);border-radius:28px;background:rgba(255,255,255,.93);box-shadow:0 24px 70px rgba(66,40,81,.12)}
+    header{padding:34px 46px 31px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(255,255,255,.77),rgba(246,239,249,.82))}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:11px;color:var(--plum);font-size:.7rem;font-weight:750;letter-spacing:.17em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:#a981bc;box-shadow:0 0 0 5px rgba(169,129,188,.13)}
+    h1{margin:0;font:500 clamp(2rem,4vw,3.25rem)/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.035em;color:#382746}header p{margin:8px 0 0;color:#8e739d;font-size:.94rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+    .general{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;padding:24px 30px;border-bottom:1px solid var(--line);background:var(--soft)}.field-card{min-width:0;padding:16px 18px;border:1px solid #e5dce9;border-radius:15px;background:#fff;box-shadow:0 5px 15px rgba(70,43,84,.035)}
+    label>span,.label{display:block;margin-bottom:8px;color:#65556e;font-size:.73rem;font-weight:740;letter-spacing:.055em;text-transform:uppercase}.field-card small{display:block;margin-top:7px;color:#918796;font-size:.7rem}
+    input,select{width:100%;height:43px;padding:0 12px;border:1px solid #d9cedf;border-radius:9px;outline:none;background:#fff;color:var(--ink);transition:.18s}input::placeholder{color:#aaa0af}input:hover,select:hover{border-color:#bfaacb}input:focus,select:focus{border-color:#8f6ca4;box-shadow:0 0 0 4px rgba(143,108,164,.12)}#customUmi{display:none;margin-top:8px}
+    section.sample{padding:27px 30px 29px;border-bottom:1px solid var(--line)}section.normal{background:linear-gradient(90deg,rgba(122,154,145,.05),transparent 38%)}section.solid{background:linear-gradient(90deg,rgba(168,111,136,.05),transparent 38%)}section.circulating{background:linear-gradient(135deg,#fbf8fc,#f7f1f9)}
+    .heading{display:flex;align-items:center;gap:14px;margin-bottom:18px}.number{display:grid;flex:0 0 auto;width:42px;height:42px;place-items:center;border:1px solid #d7c7df;border-radius:50%;background:#faf7fb;color:var(--plum);font-size:.72rem;font-weight:800;letter-spacing:.06em}.heading h2{margin:0;font:500 1.45rem Georgia,"Times New Roman",serif;letter-spacing:-.018em}.heading p{margin:3px 0 0;color:var(--muted);font-size:.78rem}
+    .sample-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 180px;gap:16px;align-items:end}.sample-note{display:flex;height:43px;align-items:center;justify-content:space-between;padding:0 14px;border:1px dashed #d7c7df;border-radius:9px;background:#faf8fb;color:#8b7d92;font-size:.69rem}.sample-note b{font-family:ui-monospace,monospace;font-size:.76rem}
+    #circulatingList{display:grid;gap:11px}.circulating-row{position:relative;display:grid;grid-template-columns:93px minmax(0,1fr) minmax(0,1fr) 180px;gap:14px;align-items:end;padding:17px 47px 17px 17px;border:1px solid #dfd4e5;border-radius:15px;background:rgba(255,255,255,.93);box-shadow:0 4px 14px rgba(63,38,76,.04);animation:appear .24s ease both}@keyframes appear{from{opacity:0;transform:translateY(-4px)}}
+    .badge{display:flex;height:43px;align-items:center;justify-content:center;gap:5px;border-radius:9px;background:#eee6f3;color:var(--dark)}.badge span{font-size:.66rem;font-weight:720;text-transform:uppercase}.badge b{font-size:.82rem}
+    .suffix{display:flex;border:1px solid #d9cedf;border-radius:9px;background:#fff}.suffix:focus-within{border-color:#8f6ca4;box-shadow:0 0 0 4px rgba(143,108,164,.12)}.suffix input{min-width:0;border:0;box-shadow:none}.suffix em{display:grid;min-width:55px;place-items:center;border-left:1px solid #e0d7e5;color:#7f7186;font-size:.74rem;font-style:normal;font-weight:650}
+    .remove{position:absolute;top:10px;right:10px;display:grid;width:29px;height:29px;padding:0;place-items:center;border:0;border-radius:50%;background:transparent;color:#a190a9;font-size:1.25rem;cursor:pointer}.remove:hover{background:#f5e9ef;color:#a14970}
+    .add{display:flex;margin:17px auto 0;align-items:center;gap:9px;padding:11px 18px;border:1px solid #bba5c8;border-radius:999px;background:#fff;color:var(--dark);font-size:.78rem;font-weight:750;cursor:pointer;box-shadow:0 5px 13px rgba(79,50,94,.06)}.add:hover{transform:translateY(-1px);background:#f8f2fa}
+    footer{display:flex;min-height:84px;align-items:center;justify-content:space-between;padding:17px 30px;background:#372943;color:#fff}.status{display:flex;align-items:center;gap:9px;color:#d9cfde;font-size:.74rem}.status i{width:7px;height:7px;border-radius:50%;background:#897792}.status.ok i{background:#a8d2b9;box-shadow:0 0 0 4px rgba(168,210,185,.12)}
+    .export{display:grid;width:52px;height:52px;padding:0;place-items:center;border:1px solid rgba(255,255,255,.34);border-radius:15px;background:#8d69a2;color:#fff;cursor:pointer;box-shadow:0 9px 20px rgba(12,5,16,.24)}.export:hover{transform:translateY(-2px);background:#a27ab9}.export svg{width:25px}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){.general,.sample-grid{grid-template-columns:1fr 1fr}.field-card:last-child,.sample-note{grid-column:1/-1}.circulating-row{grid-template-columns:80px 1fr 1fr}.months{grid-column:2/-1}}
+    @media(max-width:650px){main{padding:14px}form{border-radius:20px}header{padding:29px 20px 25px}.general,.sample-grid,.circulating-row{grid-template-columns:1fr}.general,section.sample{padding-inline:18px}.field-card:last-child,.sample-note,.months{grid-column:auto}.circulating-row{padding-right:47px}.badge{width:100px}footer{padding-inline:18px}.status{max-width:72%}}
+  </style>
+</head>
+<body>
+<main>
+  <form id="sampleForm">
+    <header><div class="eyebrow"><span class="dot"></span>Sample sheet TSV</div><h1>Formulaire de suivi longitudinal</h1><p>Tumeur vs normal</p></header>
+    <section class="general">
+      <h2 class="sr">Informations générales</h2>
+      <label class="field-card"><span>Date de demande</span><input id="requestDate" type="text" inputmode="numeric" pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/[0-9]{4}" placeholder="jj/mm/aaaa" title="Saisissez une date au format jj/mm/aaaa" required><small>Format : jj/mm/aaaa</small></label>
+      <label class="field-card"><span>Identifiant patient</span><input id="patientId" type="text" placeholder="Ex. PATIENT_001" required><small>Identifiant unique, sans donnée nominative</small></label>
+      <div class="field-card"><label for="umi" class="label">Structure des UMI</label><select id="umi"><option value="5M+T">5M+T</option><option value="other">Autre…</option></select><input id="customUmi" type="text" placeholder="Précisez la structure"><small id="umiHelp">Sélectionnez le schéma utilisé</small></div>
+    </section>
+    <section class="sample normal">
+      <div class="heading"><span class="number">01</span><div><h2>ADN normal</h2><p>Échantillon de référence</p></div></div>
+      <div class="sample-grid">
+        <label><span>FASTQ R1</span><input id="normalR1" type="text" placeholder="chemin/vers/normal_R1.fastq.gz" required></label>
+        <label><span>FASTQ R2</span><input id="normalR2" type="text" placeholder="chemin/vers/normal_R2.fastq.gz" required></label>
+        <div class="sample-note"><b>R1 · R2</b><span>Paire de lectures</span></div>
+      </div>
+    </section>
+    <section class="sample solid">
+      <div class="heading"><span class="number">02</span><div><h2>Tumeur solide</h2><p>Échantillon tumoral primaire</p></div></div>
+      <div class="sample-grid">
+        <label><span>FASTQ R1</span><input id="solidR1" type="text" placeholder="chemin/vers/solid_R1.fastq.gz" required></label>
+        <label><span>FASTQ R2</span><input id="solidR2" type="text" placeholder="chemin/vers/solid_R2.fastq.gz" required></label>
+        <div class="sample-note"><b>R1 · R2</b><span>Paire de lectures</span></div>
+      </div>
+    </section>
+    <section class="sample circulating">
+      <div class="heading"><span class="number">03</span><div><h2>ADN tumoral circulant</h2><p id="count">1 prélèvement longitudinal</p></div></div>
+      <div id="circulatingList"></div>
+      <button class="add" type="button" id="add">＋ Ajouter un ADN circulant</button>
+    </section>
+    <footer>
+      <div class="status" id="status" role="status" aria-live="polite"><i></i><span>Les données restent dans votre navigateur.</span></div>
+      <button class="export" type="submit" title="Exporter la sample sheet au format TSV" aria-label="Exporter la sample sheet au format TSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button>
+    </footer>
+  </form>
+</main>
+<script>
+  (() => {
+    const list = document.getElementById("circulatingList");
+    const count = document.getElementById("count");
+    const status = document.getElementById("status");
+    let nextId = 1;
+
+    const setStatus = (text, ok = true) => {
+      status.classList.toggle("ok", ok);
+      status.querySelector("span").textContent = text;
+    };
+
+    const renumber = () => {
+      [...list.children].forEach((row, index) => {
+        const number = index + 1;
+        row.dataset.number = number;
+        row.querySelector(".badge b").textContent = String(number).padStart(2, "0");
+        row.querySelector(".remove").setAttribute("aria-label", `Supprimer le circulant ${number}`);
+        row.querySelector(".remove").title = `Supprimer le circulant ${number}`;
+      });
+      const n = list.children.length;
+      count.textContent = `${n} prélèvement${n > 1 ? "s" : ""} ${n > 1 ? "longitudinaux" : "longitudinal"}`;
+    };
+
+    const addSample = () => {
+      const id = nextId++;
+      const row = document.createElement("article");
+      row.className = "circulating-row";
+      row.dataset.id = id;
+      row.innerHTML = `
+        <div class="badge"><span>Circulant</span><b></b></div>
+        <label><span>FASTQ R1</span><input class="cir-r1" type="text" placeholder="chemin/vers/circulant_R1.fastq.gz" required></label>
+        <label><span>FASTQ R2</span><input class="cir-r2" type="text" placeholder="chemin/vers/circulant_R2.fastq.gz" required></label>
+        <label class="months"><span>Temps de suivi</span><div class="suffix"><input class="cir-months" type="number" min="0" step="1" placeholder="0" required><em>mois</em></div></label>
+        <button class="remove" type="button">×</button>`;
+      row.querySelector(".remove").addEventListener("click", () => {
+        row.remove();
+        renumber();
+        setStatus("Prélèvement circulant supprimé.");
+      });
+      list.appendChild(row);
+      renumber();
+    };
+
+    document.getElementById("add").addEventListener("click", () => {
+      addSample();
+      setStatus("Nouveau prélèvement circulant ajouté.");
+    });
+
+    document.getElementById("umi").addEventListener("change", event => {
+      const custom = document.getElementById("customUmi");
+      const other = event.target.value === "other";
+      custom.style.display = other ? "block" : "none";
+      custom.required = other;
+      document.getElementById("umiHelp").style.display = other ? "none" : "block";
+      if (other) custom.focus();
+    });
+
+    const val = id => document.getElementById(id).value.trim();
+    const safeName = text => text.replace(/[^a-zA-Z0-9._-]+/g, "_").replace(/^_+|_+$/g, "");
+
+    document.getElementById("sampleForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const umi = val("umi") === "other" ? val("customUmi") : val("umi");
+      if (!umi) {
+        setStatus("Veuillez préciser la structure des UMI.", false);
+        return;
+      }
+      const headers = ["Date","patient_id","UMI_structure","normal_R1","normal_R2","tumeur_solide_R1","tumeur_solide_R2"];
+      const values = [val("requestDate"),val("patientId"),umi,val("normalR1"),val("normalR2"),val("solidR1"),val("solidR2")];
+      [...list.children].forEach((row, index) => {
+        const n = index + 1;
+        headers.push(`circulant_${n}_date`,`circulant_${n}_R1`,`circulant_${n}_R2`);
+        values.push(row.querySelector(".cir-months").value,row.querySelector(".cir-r1").value.trim(),row.querySelector(".cir-r2").value.trim());
+      });
+      const blob = new Blob([`${headers.join("\t")}\n${values.join("\t")}\n`], {type:"text/tab-separated-values;charset=utf-8"});
+      const suggestedName = `sample_sheet_${safeName(val("patientId")) || "patient"}.tsv`;
+      try {
+        if (window.showSaveFilePicker) {
+          const handle = await window.showSaveFilePicker({suggestedName,types:[{description:"Sample sheet TSV",accept:{"text/tab-separated-values":[".tsv"]}}]});
+          const writable = await handle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+        } else {
+          const choice = prompt("Nom du fichier à exporter :", suggestedName);
+          if (!choice) return;
+          const filename = choice.endsWith(".tsv") ? choice : `${choice}.tsv`;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url; a.download = filename; a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+        setStatus("Sample sheet TSV exportée avec succès.");
+      } catch (error) {
+        if (error.name !== "AbortError") setStatus("L’export a échoué. Veuillez réessayer.", false);
+      }
+    });
+    addSample();
+  })();
+</script>
+</body>
+</html>

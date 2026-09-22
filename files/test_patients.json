@@ -1,0 +1,71 @@
+
+{
+  "reference_fasta": "path_to/hg38.fasta",
+  "output_dir": "/Results/umi_pipeline",
+  "reference_annotation_gnomad": "/path_to/af-only-gnomad.hg38.vcf.gz",
+  "refrence_bed": "/path_to/refrence_bed.bed",
+  "microsatellite_list": "/path_to/microsatellites.list",
+  "accessible_bed": "/path_to/accessible.bed",
+  "reference_gene_labels": "/path_to/refFlat_38.txt",
+  "annotated_bed": "/path_to/clean_bed_Tvs_annot_num_bis.bed",
+
+
+
+  "group_reads_by_umi": {
+    "strategy": "Adjacency",
+    "edits": 1
+  },
+
+  "call_molecular_consensus_reads": {
+    "min_reads": 1,
+    "min_input_base_quality": 3
+  },
+  "Zipper_Bams": {
+    "tags-to-reverse": "Consensus",
+    "tags-to-revcomp": "Consensus"
+  },
+  "filter_consensus_reads": {
+    "min_reads": 3,
+    "min_base_quality": 30
+  },
+  "mutect2_calling": {
+    "native_pair_hmm_threads": 4,
+    "min_base_quality_score": 10,
+    "f1r2_min_bq ": 10
+  },
+  "Select_variants": {
+    "exclude-filtered": "true"
+  },
+  "viscap": {
+    "script": "/home/nbenfadhel/VisCap.R",
+    "cfg": "/home/nbenfadhel/VisCap.cfg",
+    "tobed_script": "/home/nbenfadhel/viscap_to_bed.py"
+  },
+  "annovar": {
+    "annovar_database": "/path_to/hg38/index/annovar",
+    "buildver": "hg38",
+    "nastring": ".",
+    "operation": "g,f,f,f",
+    "protocol": "refGene,cosmic70,avsnp151,clinvar_20190305"
+  },
+  "snp_Eff": {
+    "config_database": "/path_to/snpEff.config",
+    "genome_version": "hg38"
+  },
+  "snp_Sift": {
+    "database": {
+      "clinvar": "/path_to/clinvar_20260808.vcf.gz",
+      "dbsnp": "/path_to/GCF_000001405.40.gz",
+      "cosmic": "/path_to/CosmicCodingMuts.vcf.gz"
+    }
+  },
+  "annotSV": {
+    "genomeBuild": "GRCh38",
+    "SVminSize": 0,
+    "annotationMode": "split",
+    "annotationDir": "/path_to/AnnotSV/3.4.4/",
+    "samplesidBEDcol": 4,
+    "svtBEDcol": 6
+  }
+  
+}
